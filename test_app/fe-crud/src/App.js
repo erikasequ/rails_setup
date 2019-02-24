@@ -12,11 +12,11 @@ class App extends Component {
     // added super() in advance to get rid of errors
 
     this.state = {
-      // These are for the fetch calls. users for the whole collection
+      // These are for the fetch calls. users for the whole collection(REQUIRED), user for one record in the collection(OPTIONAL)
       users: [],
       user: {},
 
-      // These are for my table/input fields
+      // These are for my table/input fields (consistent with the schema of my table)
       first_name: '',
       last_name: '',
       age: '',
@@ -48,6 +48,8 @@ class App extends Component {
     const { name, value } = evt.target;
 
     this.setState({ [name]: value });
+    // This object literal syntax {[key]: value} is wrapping our input field's name and value prop, 
+    // and setState will dynamically set the name as the key, and the state prop as its value
   }
 
   handleUpdate = async (id) => {
@@ -62,9 +64,10 @@ class App extends Component {
           "hometown": this.state.hometown
         }
       }
+      // this body object represents one individual record in the users table
 
       const updateUser = await Axios.put(url, body);
-      // the PUT request requires two arguments: url, and the body that contains the template of 
+      // the PUT request requires two arguments: the url route, and the object that contains the payload
       console.log('updated', updateUser);
       
 
@@ -72,6 +75,13 @@ class App extends Component {
   }
 
   render() {
+    // setting up ternary for our async Axios GET call
+    // so that our map doesn't error out when the page finishes loading before the promise is resolved.
+
+    // pay attention to the attributes I passed into each input element.
+    // what are the 3 props I added to my input fields so that they get hooked up to my Axios PUT request?
+    // how did I connect my update button so that it actually updates a record in my users table?
+
     const renderUsers = this.state.users ?
       this.state.users.map((eachUser) => {
         return (
